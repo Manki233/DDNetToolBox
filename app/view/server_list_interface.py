@@ -14,7 +14,7 @@ class ServerListInterface(QWidget):
         self.setObjectName("ServerListInterface")
 
         self.vBoxLayout = QVBoxLayout(self)
-        self.vBoxLayout.addWidget(TitleLabel('服务器列表管理', self))
+        self.vBoxLayout.addWidget(TitleLabel('Sorry, here no i18n longer...', self))
         self.setLayout(self.vBoxLayout)
 
         self.commandBar = CommandBar()
