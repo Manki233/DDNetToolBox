@@ -59,11 +59,11 @@ class TEECard(CardWidget):
 
         self.labels = [
             SubtitleLabel(name, self),
-            BodyLabel('全球排名：加载中...\n'
-                      '游戏分数：加载中...\n'
-                      '游玩时长：加载中...\n'
-                      '最后完成：加载中...\n'
-                      '入坑时间：加载中...', self),
+            BodyLabel('Global rank：Loading...\n'
+                      'Score：Loading...\n'
+                      'Time of Play：Loading...\n'
+                      'Last race：Loading...\n'
+                      'First play：Loading...', self),
         ]
 
         for label in self.labels:
@@ -88,21 +88,21 @@ class TEECard(CardWidget):
 
     def on_data_loaded(self, json_data: dict):
         if json_data == {}:
-            self.labels[1].setText(f'全球排名：NO.数据获取失败\n'
-                                   f'游戏分数：数据获取失败/数据获取失败 分\n'
-                                   f'游玩时长：数据获取失败 小时\n'
-                                   f'最后完成：数据获取失败\n'
-                                   f'入坑时间：数据获取失败')
+            self.labels[1].setText(f'Global rank：NO.FAILED\n'
+                                   f'Score：FAILED\n'
+                                   f'Time of Play：FAILED\n'
+                                   f'Last race：FAILED\n'
+                                   f'First play：FAILED')
             return
         use_time = 0
         for time in json_data['activity']:
             use_time = use_time + time['hours_played']
 
-        self.labels[1].setText(f'全球排名：NO.{json_data["points"]["rank"]}\n'
-                               f'游戏分数：{json_data["points"]["points"]}/{json_data["points"]["total"]} 分\n'
-                               f'游玩时长：{use_time} 小时\n'
-                               f'最后完成：{json_data["last_finishes"][0]["map"]}\n'
-                               f'入坑时间：{datetime.datetime.fromtimestamp(json_data["first_finish"]["timestamp"])}')
+        self.labels[1].setText(f'Global rank：NO.{json_data["points"]["rank"]}\n'
+                               f'Score：{json_data["points"]["points"]}/{json_data["points"]["total"]}\n'
+                               f'Time of Play：{use_time} hour\n'
+                               f'Last race：{json_data["last_finishes"][0]["map"]}\n'
+                               f'First play：{datetime.datetime.fromtimestamp(json_data["first_finish"]["timestamp"])}')
 
 
 class FriendCard(CardWidget):
@@ -147,7 +147,7 @@ class FriendList(HeaderCardWidget):
             self.friend_list = GlobalsVal.ddnet_setting_config['add_friend']
             QTimer.singleShot(0, self.load_friend)
         except:
-            self.label = SubtitleLabel("没有获取到任何数据 T-T", self)
+            self.label = SubtitleLabel("No data here T-T", self)
             self.hBoxLayout = QHBoxLayout()
 
             setFont(self.label, 24)
@@ -209,8 +209,8 @@ class HomeInterface(QWidget):
             return
         if GlobalsVal.ddnet_info['version'] != json_data[0]["version"]:
             InfoBar.warning(
-                title='DDNet 版本检测',
-                content="您当前的DDNet版本为 {} 最新版本为 {} 请及时更新".format(GlobalsVal.ddnet_info['version'], json_data[0]["version"]),
+                title='DDNet Version',
+                content="Your DDNet is {} ver. The latest {} Please visit ddnet.org for Update".format(GlobalsVal.ddnet_info['version'], json_data[0]["version"]),
                 orient=Qt.Horizontal,
                 isClosable=True,
                 position=InfoBarPosition.BOTTOM_RIGHT,
