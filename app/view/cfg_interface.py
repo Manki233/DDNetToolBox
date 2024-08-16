@@ -17,8 +17,8 @@ class CFGSelectMessageBox(MessageBoxBase):
         super().__init__(parent)
 
         self.selected_files = None
-        self.titleLabel = SubtitleLabel('选择CFG文件')
-        self.label = QLabel("拖拽文件到此处或点击选择文件", self)
+        self.titleLabel = SubtitleLabel('Choose for CFG')
+        self.label = QLabel("Drag or Choose", self)
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setStyleSheet("QLabel { border: 2px dashed #aaa; }")
 
@@ -47,7 +47,7 @@ class CFGSelectMessageBox(MessageBoxBase):
     def select_file(self, event):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
-        files, _ = QFileDialog.getOpenFileNames(self, "选择CFG文件", "", "CFG Files (*.cfg);;All Files (*)",
+        files, _ = QFileDialog.getOpenFileNames(self, "Choose CFG File", "", "CFG Files (*.cfg);;All Files (*)",
                                                 options=options)
 
         if files:
@@ -67,16 +67,16 @@ class CFGInterface(QWidget):
         self.commandBar = CommandBar(self)
         self.table = TableWidget(self)
 
-        self.vBoxLayout.addWidget(TitleLabel('CFG管理', self))
+        self.vBoxLayout.addWidget(TitleLabel('CFG Manager', self))
         self.setLayout(self.vBoxLayout)
 
         self.commandBar.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
 
-        self.addButton(FluentIcon.ADD, '添加'),
-        self.addButton(FluentIcon.DELETE, '删除'),
+        self.addButton(FluentIcon.ADD, 'Add'),
+        self.addButton(FluentIcon.DELETE, 'Delete'),
         # self.addButton(FluentIcon.ACCEPT, '启用'),
         # self.addButton(FluentIcon.CLOSE, '禁用'),
-        self.addButton(FluentIcon.SYNC, '刷新'),
+        self.addButton(FluentIcon.SYNC, 'Refresh'),
 
         self.table.setBorderVisible(True)
         self.table.setBorderRadius(5)
@@ -110,14 +110,14 @@ class CFGInterface(QWidget):
         self.commandBar.addAction(action)
 
     def Button_clicked(self, text):
-        if text == "添加":
+        if text == "Add":
             w = CFGSelectMessageBox(self)
             if w.exec():
                 files = w.get_selected_files()
                 if files is None:
                     InfoBar.error(
-                        title='错误',
-                        content="您没有选择任何文件",
+                        title='Error',
+                        content="No file choosed",
                         orient=Qt.Horizontal,
                         isClosable=True,
                         position=InfoBarPosition.BOTTOM_RIGHT,
@@ -135,8 +135,8 @@ class CFGInterface(QWidget):
                             shutil.copy(i, cfg.get(cfg.DDNetFolder))
                         except Exception as e:
                             InfoBar.error(
-                                title='错误',
-                                content=f"文件 {i} 复制失败\n原因：{e}",
+                                title='Error',
+                                content=f"File: {i} Copy failed\nReason：{e}",
                                 orient=Qt.Horizontal,
                                 isClosable=True,
                                 position=InfoBarPosition.BOTTOM_RIGHT,
@@ -146,21 +146,21 @@ class CFGInterface(QWidget):
                             errors += 1
 
                     InfoBar.success(
-                        title='成功',
-                        content=f"文件复制已完成\n共复制了 {len(files)} 个文件，{cover} 个文件被覆盖，{errors} 个文件失败",
+                        title='Success',
+                        content=f"Copy Success\nCopy {len(files)} File，{cover} Coverd，{errors} failed",
                         orient=Qt.Horizontal,
                         isClosable=True,
                         position=InfoBarPosition.BOTTOM_RIGHT,
                         duration=2000,
                         parent=self
                     )
-                    self.Button_clicked("刷新")
-        elif text == "删除":
+                    self.Button_clicked("Refresh")
+        elif text == "Delete":
             selected_items = self.table.selectedItems()
             if selected_items == []:
                 InfoBar.warning(
-                    title='警告',
-                    content="您没有选择任何东西",
+                    title='Warning',
+                    content="No file choosed",
                     orient=Qt.Horizontal,
                     isClosable=True,
                     position=InfoBarPosition.BOTTOM_RIGHT,
@@ -171,17 +171,17 @@ class CFGInterface(QWidget):
 
             rows_to_delete = {}
             for i in selected_items:
-                if i.text() in ["启用", "禁用"]:
+                if i.text() in ["Enable", "Disable"]:
                     continue
                 rows_to_delete[i.row()] = i.text()
 
             delete_text = ""
             for i in list(set(i.text() for i in selected_items)):
-                if i in ["启用", "禁用"]:
+                if i in ["Enable", "Disable"]:
                     continue
                 delete_text += f"{i}\n"
 
-            w = MessageBox("警告", f"此操作将会从磁盘中永久删除下列文件，不可恢复：\n{delete_text}", self)
+            w = MessageBox("Warning", f"Here file will be delete FOREVER：\n{delete_text}", self)
             delete = 0
             if w.exec():
                 for i, a in enumerate(rows_to_delete):
@@ -190,8 +190,8 @@ class CFGInterface(QWidget):
                     delete += 1
 
             InfoBar.warning(
-                title='成功',
-                content=f"共删除 {delete} 个文件，{len(rows_to_delete) - delete} 个文件删除失败",
+                title='Success',
+                content=f"Delete {delete} file，{len(rows_to_delete) - delete} file faild",
                 orient=Qt.Horizontal,
                 isClosable=True,
                 position=InfoBarPosition.BOTTOM_RIGHT,
@@ -199,7 +199,7 @@ class CFGInterface(QWidget):
                 parent=self
             )
 
-        elif text == "刷新":
+        elif text == "Refresh":
             self.table.clear()
             self.table.setRowCount(0)
             self.table.clearSelection()
@@ -212,15 +212,15 @@ class CFGInterface(QWidget):
                 """
                 if server_link.endswith("disable.cfg"):
                     self.table.setItem(i, 0, QTableWidgetItem(server_link))
-                    self.table.setItem(i, 1, QTableWidgetItem("禁用"))
+                    self.table.setItem(i, 1, QTableWidgetItem("Disable"))
                 else:
                     self.table.setItem(i, 0, QTableWidgetItem(server_link))
-                    self.table.setItem(i, 1, QTableWidgetItem("启用"))
+                    self.table.setItem(i, 1, QTableWidgetItem("Enable"))
                 """
 
             InfoBar.success(
-                title='成功',
-                content="已重新加载本地资源",
+                title='Success',
+                content="Refreshed",
                 orient=Qt.Horizontal,
                 isClosable=True,
                 position=InfoBarPosition.BOTTOM_RIGHT,
