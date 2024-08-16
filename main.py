@@ -88,12 +88,12 @@ class MainWindow(FluentWindow):
         return text
 
     def initNavigation(self):
-        self.addSubInterface(self.homeInterface, FIF.HOME, '首页')
-        self.addSubInterface(self.CFGInterface, FIF.APPLICATION, 'CFG管理')
-        self.addSubInterface(self.ResourceInterface, FIF.EMOJI_TAB_SYMBOLS, '材质管理')
-        self.addSubInterface(self.ServerListMirrorInterface, FIF.LIBRARY, '服务器列表管理')
-        # self.addSubInterface(self.ServerListPreviewInterface, FIF.LIBRARY, '服务器列表预览')
-        # self.addSubInterface(self.ResourceDownloadInterface, FIF.DOWNLOAD, '材质下载')
+        self.addSubInterface(self.homeInterface, FIF.HOME, 'Home')
+        self.addSubInterface(self.CFGInterface, FIF.APPLICATION, 'CFG Manager')
+        self.addSubInterface(self.ResourceInterface, FIF.EMOJI_TAB_SYMBOLS, 'Texture and Skin')
+        self.addSubInterface(self.ServerListMirrorInterface, FIF.LIBRARY, 'Server List JSON')
+        # self.addSubInterface(self.ServerListPreviewInterface, FIF.LIBRARY, 'View for Server List')
+        # self.addSubInterface(self.ResourceDownloadInterface, FIF.DOWNLOAD, 'Texture and Skin Download')
 
         self.addSubInterface(self.settingInterface, FIF.SETTING, '设置', NavigationItemPosition.BOTTOM)
 
